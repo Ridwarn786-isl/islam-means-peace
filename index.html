@@ -316,26 +316,8 @@
         </div>
     </div>
 
-    <!-- Firebase SDK Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyCVocV5IrXzdeqa6sH5CHqjSCT7BWVbVTo",
-            authDomain: "islam-means-peace.firebaseapp.com",
-            databaseURL: "https://islam-means-peace-default-rtdb.firebaseio.com/",
-            projectId: "islam-means-peace",
-            storageBucket: "islam-means-peace.firebasestorage.app",
-            messagingSenderId: "287015957447",
-            appId: "1:287015957447:web:af8b6a7a100146c540dfe2",
-            measurementId: "G-B47Q6R9RNP"
-        };
-
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const postsRef = database.ref('posts');
-
+        const DB_URL = "https://islam-means-peace-default-rtdb.firebaseio.com/posts";
         const ADMIN_PASSWORD = "ridwarn952001@";
 
         document.addEventListener('DOMContentLoaded', loadPostsFromFirebase);
@@ -388,7 +370,7 @@
             return `<video controls src="${url}"></video>`;
         }
 
-        function saveAndPost() {
+        async function saveAndPost() {
             const submitBtn = document.getElementById('submitBtn');
             const title = document.getElementById('titleInput').value.trim();
             const videoUrl = document.getElementById('videoInput').value.trim();
@@ -404,32 +386,47 @@
             submitBtn.innerText = "Publishing...";
             submitBtn.disabled = true;
 
-            postsRef.push({
+            const postData = {
                 title: title,
                 videoUrl: videoUrl,
                 text: text,
                 adText: adText,
                 adMediaUrl: adMediaUrl,
                 time: new Date().toLocaleDateString()
-            }).then(() => {
-                alert("Video published successfully!");
-                document.getElementById('uploadForm').reset();
+            };
+
+            try {
+                const response = await fetch(`${DB_URL}.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(postData)
+                });
+
+                if (response.ok) {
+                    alert("Video published successfully!");
+                    document.getElementById('uploadForm').reset();
+                    closeModal();
+                    loadPostsFromFirebase();
+                } else {
+                    const errData = await response.json();
+                    alert("Error posting video: " + (errData.error || response.statusText));
+                }
+            } catch (err) {
+                alert("Network/Connection Error: " + err.message);
+            } finally {
                 submitBtn.innerText = "Publish Video";
                 submitBtn.disabled = false;
-                closeModal();
-            }).catch((error) => {
-                alert("Error posting video: " + error.message);
-                submitBtn.innerText = "Publish Video";
-                submitBtn.disabled = false;
-            });
+            }
         }
 
-        function loadPostsFromFirebase() {
-            postsRef.on('value', (snapshot) => {
+        async function loadPostsFromFirebase() {
+            try {
+                const response = await fetch(`${DB_URL}.json`);
+                const data = await response.json();
+                
                 const videoGrid = document.getElementById('videoGrid');
                 videoGrid.innerHTML = '';
 
-                const data = snapshot.val();
                 if (data) {
                     const postsArray = Object.keys(data).map(key => ({
                         id: key,
@@ -471,13 +468,25 @@
                         videoGrid.appendChild(card);
                     });
                 }
-            });
+            } catch (err) {
+                console.error("Failed to load posts:", err);
+            }
         }
 
-        function deletePost(id) {
+        async function deletePost(id) {
             const password = prompt("Admin Password to Delete:");
             if (password === ADMIN_PASSWORD) {
-                database.ref('posts/' + id).remove();
+                try {
+                    const response = await fetch(`${DB_URL}/${id}.json`, { method: 'DELETE' });
+                    if (response.ok) {
+                        alert("Post deleted!");
+                        loadPostsFromFirebase();
+                    } else {
+                        alert("Failed to delete post!");
+                    }
+                } catch (err) {
+                    alert("Error: " + err.message);
+                }
             } else if (password !== null) {
                 alert("Incorrect Password!");
             }
