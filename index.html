@@ -311,7 +311,7 @@
                     <input type="text" id="adMediaInput" placeholder="https://... (MP4, Image, YouTube or Drive link)">
                 </div>
 
-                <button class="btn-submit" type="submit">Publish Video</button>
+                <button class="btn-submit" type="submit" id="submitBtn">Publish Video</button>
             </form>
         </div>
     </div>
@@ -324,7 +324,7 @@
         const firebaseConfig = {
             apiKey: "AIzaSyCVocV5IrXzdeqa6sH5CHqjSCT7BWVbVTo",
             authDomain: "islam-means-peace.firebaseapp.com",
-            databaseURL: "https://islam-means-peace-default-rtdb.firebaseio.com",
+            databaseURL: "https://islam-means-peace-default-rtdb.firebaseio.com/",
             projectId: "islam-means-peace",
             storageBucket: "islam-means-peace.firebasestorage.app",
             messagingSenderId: "287015957447",
@@ -389,6 +389,7 @@
         }
 
         function saveAndPost() {
+            const submitBtn = document.getElementById('submitBtn');
             const title = document.getElementById('titleInput').value.trim();
             const videoUrl = document.getElementById('videoInput').value.trim();
             const text = document.getElementById('textInput').value.trim();
@@ -400,21 +401,26 @@
                 return;
             }
 
-            const newPostRef = postsRef.push();
-            newPostRef.set({
+            submitBtn.innerText = "Publishing...";
+            submitBtn.disabled = true;
+
+            postsRef.push({
                 title: title,
                 videoUrl: videoUrl,
                 text: text,
                 adText: adText,
                 adMediaUrl: adMediaUrl,
                 time: new Date().toLocaleDateString()
-            }, (error) => {
-                if (error) {
-                    alert("Error posting video: " + error.message);
-                } else {
-                    document.getElementById('uploadForm').reset();
-                    closeModal();
-                }
+            }).then(() => {
+                alert("Video published successfully!");
+                document.getElementById('uploadForm').reset();
+                submitBtn.innerText = "Publish Video";
+                submitBtn.disabled = false;
+                closeModal();
+            }).catch((error) => {
+                alert("Error posting video: " + error.message);
+                submitBtn.innerText = "Publish Video";
+                submitBtn.disabled = false;
             });
         }
 
