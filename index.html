@@ -3,497 +3,332 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ISLAM MEANS PEACE</title>
+    <title>My Video Platform</title>
     <style>
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
             font-family: Arial, sans-serif;
         }
 
         body {
-            background-color: #f8fafc;
-            color: #1e293b;
+            background-color: #000;
+            color: #fff;
         }
 
+        /* Header / Navbar */
         header {
-            background-color: #ffffff;
-            padding: 12px 20px;
+            background-color: #111;
+            border-bottom: 2px solid #ff0033;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 2px solid #ef4444;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .logo {
-            font-size: 1.2rem;
+            font-size: 24px;
             font-weight: bold;
-            color: #ef4444;
-            letter-spacing: 1px;
+            color: #fff;
         }
 
         .logo span {
-            color: #0f172a;
-        }
-
-        .btn-add-post {
-            background-color: #ef4444;
+            background-color: #ff0033;
             color: #fff;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-left: 5px;
+        }
+
+        .admin-btn {
+            background-color: #ff0033;
+            color: white;
             border: none;
-            padding: 8px 14px;
-            border-radius: 4px;
-            font-weight: bold;
+            padding: 8px 15px;
             cursor: pointer;
-            font-size: 0.85rem;
-            transition: 0.2s;
+            border-radius: 3px;
+            font-weight: bold;
         }
 
-        .btn-add-post:hover {
-            background-color: #dc2626;
-        }
-
+        /* Container Layout */
         .container {
             max-width: 1100px;
             margin: 20px auto;
-            padding: 0 10px;
+            padding: 0 15px;
         }
 
-        .section-title {
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-            color: #0f172a;
-            border-left: 4px solid #ef4444;
-            padding-left: 10px;
-            font-weight: bold;
+        /* Admin Panel */
+        .admin-panel {
+            background-color: #1a1a1a;
+            border: 1px solid #ff0033;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            display: none; /* Admin Mode မဖွင့်မချင်း ဖုံးထားမည် */
         }
 
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 15px;
+        .admin-panel h3 {
+            color: #ff0033;
+            margin-bottom: 10px;
         }
 
-        .video-card {
-            background-color: #ffffff;
-            border-radius: 6px;
-            overflow: hidden;
-            border: 1px solid #e2e8f0;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-
-        .video-thumbnail-wrapper {
-            position: relative;
+        .admin-panel input, .admin-panel textarea {
             width: 100%;
-            height: 220px;
-            background-color: #000;
-        }
-
-        .video-thumbnail-wrapper video,
-        .video-thumbnail-wrapper iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            object-fit: cover;
-            display: block;
-        }
-
-        .video-info {
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
-        }
-
-        .video-title {
-            font-size: 0.95rem;
-            font-weight: bold;
-            color: #0f172a;
-            margin-bottom: 6px;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .video-desc {
-            font-size: 0.82rem;
-            color: #475569;
-            margin-bottom: 8px;
-            white-space: pre-wrap;
-        }
-
-        .ad-banner-box {
-            background-color: #fffbeb;
-            border: 1px dashed #f59e0b;
-            padding: 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            color: #b45309;
-            margin-top: 8px;
-        }
-
-        .ad-badge {
-            background-color: #f59e0b;
+            padding: 10px;
+            margin-bottom: 10px;
+            background-color: #222;
+            border: 1px solid #444;
             color: #fff;
-            font-size: 0.65rem;
-            font-weight: bold;
-            padding: 2px 5px;
             border-radius: 3px;
-            display: inline-block;
-            margin-bottom: 4px;
         }
 
-        .ad-media-wrapper {
-            width: 100%;
-            margin-top: 5px;
-            border-radius: 4px;
+        .admin-panel button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Video Player Section */
+        .player-container {
+            background-color: #111;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .video-box {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
             overflow: hidden;
             background-color: #000;
         }
 
-        .ad-media-wrapper video, .ad-media-wrapper img, .ad-media-wrapper iframe {
-            width: 100%;
-            height: 150px;
-            border: none;
-            object-fit: contain;
-            display: block;
-        }
-
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-            padding-top: 6px;
-            border-top: 1px solid #f1f5f9;
-            font-size: 0.75rem;
-            color: #64748b;
-        }
-
-        .btn-delete {
-            background: none;
-            border: none;
-            color: #ef4444;
-            cursor: pointer;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
+        .video-box iframe, .video-box video {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            z-index: 200;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-        }
-
-        .modal-content {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 8px;
-            width: 100%;
-            max-width: 450px;
-            border: 1px solid #ef4444;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-
-        .form-group {
-            margin-bottom: 12px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 0.8rem;
-            color: #475569;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 8px;
-            border-radius: 4px;
-            border: 1px solid #cbd5e1;
-            background-color: #f8fafc;
-            color: #0f172a;
-            font-size: 0.85rem;
-        }
-
-        .ad-input-box {
-            border: 1px dashed #f59e0b;
-            background-color: #fffbeb;
-            padding: 10px;
-            border-radius: 6px;
-        }
-
-        .btn-submit {
-            width: 100%;
-            background-color: #ef4444;
-            color: #fff;
-            padding: 10px;
             border: none;
-            border-radius: 4px;
-            font-weight: bold;
+        }
+
+        .video-details {
+            margin-top: 15px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .video-title {
+            font-size: 20px;
+            color: #ff0033;
+            margin-bottom: 10px;
+        }
+
+        .video-caption {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.5;
+        }
+
+        /* Comments Section */
+        .comments-section {
+            margin-top: 20px;
+            background-color: #111;
+            padding: 15px;
+            border-radius: 5px;
+        }
+
+        .comments-section h3 {
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .comment-input-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .comment-input-box input {
+            flex: 1;
+            padding: 10px;
+            background-color: #222;
+            border: 1px solid #333;
+            color: #fff;
+            border-radius: 3px;
+        }
+
+        .comment-input-box button {
+            background-color: #ff0033;
+            color: white;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .comment-list {
+            list-style: none;
+        }
+
+        .comment-item {
+            background-color: #1a1a1a;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid #ff0033;
+            border-radius: 3px;
+        }
+
+        .comment-item span {
+            font-size: 12px;
+            color: #888;
+            display: block;
             margin-top: 5px;
         }
     </style>
 </head>
 <body>
 
+    <!-- Header -->
     <header>
-        <div class="logo">ISLAM <span>MEANS PEACE</span></div>
-        <button class="btn-add-post" onclick="checkAdminAndOpen()">+ Upload Video</button>
+        <div class="logo">MY<span>VIDEOS</span></div>
+        <button class="admin-btn" onclick="toggleAdmin()">Admin Toggle</button>
     </header>
 
     <div class="container">
-        <div class="section-title">FEATURED VIDEOS</div>
-        <div class="video-grid" id="videoGrid"></div>
-    </div>
 
-    <!-- Upload Modal -->
-    <div class="modal" id="postModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="color:#ef4444;">Upload New Video</h3>
-                <button style="background:none; border:none; color:#0f172a; font-size:1.2rem; cursor:pointer;" onclick="closeModal()">&times;</button>
+        <!-- Admin Panel (Viewer မပြုပြင်နိုင်အောင် သီးသန့်ထားထားသည်) -->
+        <div class="admin-panel" id="adminPanel">
+            <h3>Admin Dashboard (Add/Update Video)</h3>
+            <input type="text" id="adminVideoTitle" placeholder="Video ခေါင်းစဉ် ရေးပါ...">
+            <input type="text" id="adminVideoLink" placeholder="Embed/Player Link ထည့်ပါ (e.g. YouTube Embed, Drive Link)">
+            <textarea id="adminVideoCaption" rows="4" placeholder="Video အတွက် Caption/အကြောင်းအရာ ရေးပါ..."></textarea>
+            <button onclick="saveVideoData()">Video တင်မည် / ပြောင်းမည်</button>
+        </div>
+
+        <!-- Main Video Display Area -->
+        <div class="player-container">
+            <div class="video-box" id="videoBox">
+                <!-- Video Link iframe အဖြစ် ဤနေရာတွင် ပေါ်မည် -->
+                <iframe id="mainPlayer" src="" allowfullscreen></iframe>
             </div>
             
-            <form id="uploadForm" onsubmit="event.preventDefault(); saveAndPost();">
-                <div class="form-group">
-                    <label>Video Title :</label>
-                    <input type="text" id="titleInput" placeholder="Enter title..." required>
-                </div>
-
-                <div class="form-group">
-                    <label>Main Video Link (YouTube, TikTok, FB, Drive, MP4) :</label>
-                    <input type="text" id="videoInput" placeholder="Paste YouTube, TikTok, FB or Drive Link" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Description :</label>
-                    <textarea id="textInput" rows="2" placeholder="Brief info..."></textarea>
-                </div>
-
-                <!-- Ad Section -->
-                <div class="ad-input-box form-group">
-                    <label style="color:#b45309;">📢 Ad Banner Settings (Optional) :</label>
-                    
-                    <label style="font-weight:normal; margin-top:5px;">Ad Text / Title:</label>
-                    <input type="text" id="adTextInput" placeholder="e.g. Special Discount Offer!">
-
-                    <label style="font-weight:normal; margin-top:5px;">Ad Video Link or Image Link:</label>
-                    <input type="text" id="adMediaInput" placeholder="https://... (MP4, Image, YouTube or Drive link)">
-                </div>
-
-                <button class="btn-submit" type="submit" id="submitBtn">Publish Video</button>
-            </form>
+            <div class="video-details">
+                <h1 class="video-title" id="displayTitle">ခေါင်းစဉ် မရှိသေးပါ</h1>
+                <p class="video-caption" id="displayCaption">Caption မရှိသေးပါ။</p>
+            </div>
         </div>
+
+        <!-- Viewer Comment Section -->
+        <div class="comments-section">
+            <h3>Comments (Viewer များ မှတ်ချက်ပေးနိုင်သည်)</h3>
+            
+            <div class="comment-input-box">
+                <input type="text" id="commentInput" placeholder="မှတ်ချက် ရေးရန်...">
+                <button onclick="addComment()">Comment ပေးမည်</button>
+            </div>
+
+            <ul class="comment-list" id="commentList">
+                <!-- Comment များ ဤနေရာတွင် ပေါ်မည် -->
+            </ul>
+        </div>
+
     </div>
 
     <script>
-        const DB_URL = "https://islam-means-peace-default-rtdb.firebaseio.com/posts";
-        const ADMIN_PASSWORD = "ridwarn952001@";
-
-        document.addEventListener('DOMContentLoaded', loadPostsFromFirebase);
-
-        function checkAdminAndOpen() {
-            const password = prompt("Admin Password:");
-            if (password === ADMIN_PASSWORD) {
-                document.getElementById('postModal').style.display = 'flex';
-            } else if (password !== null) {
-                alert("Incorrect Password!");
-            }
-        }
-
-        function closeModal() {
-            document.getElementById('postModal').style.display = 'none';
-        }
-
-        function getMediaElementHTML(url) {
-            if (!url) return '';
-            url = url.trim();
-
-            if (url.includes('drive.google.com')) {
-                let fileId = '';
-                const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
-                if (match && match[1]) fileId = match[1];
-                if (fileId) {
-                    return `<video controls style="width:100%; height:100%;" src="https://lh3.googleusercontent.com/u/0/d/${fileId}=s0"></video>`
-                        || `<iframe src="https://drive.google.com/file/d/${fileId}/preview" allow="autoplay; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
+        // Admin Panel ကို Toggle လုပ်ခြင်း (စမ်းသပ်ရန်)
+        function toggleAdmin() {
+            const panel = document.getElementById('adminPanel');
+            if (panel.style.display === 'none' || panel.style.display === '') {
+                let password = prompt("Admin Password ရိုက်ထည့်ပါ:");
+                if (password === "admin123") { // Admin စကားဝှက်
+                    panel.style.display = 'block';
+                } else {
+                    alert("Password မှားယွင်းနေပါသည်။");
                 }
+            } else {
+                panel.style.display = 'none';
             }
-
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                let ytId = '';
-                if (url.includes('youtu.be/')) ytId = url.split('youtu.be/')[1].split('?')[0];
-                else if (url.includes('shorts/')) ytId = url.split('shorts/')[1].split('?')[0];
-                else if (url.includes('v=')) ytId = url.split('v=')[1].split('&')[0];
-                if (ytId) return `<iframe src="https://www.youtube.com/embed/${ytId}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
-            }
-
-            if (url.includes('tiktok.com')) {
-                const match = url.match(/\/video\/(\d+)/);
-                if (match && match[1]) return `<iframe src="https://www.tiktok.com/embed/v2/${match[1]}" allow="fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
-            }
-
-            if (url.includes('facebook.com') || url.includes('fb.watch')) {
-                return `<iframe src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(url)}&show_text=false" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share; fullscreen" allowfullscreen webkitallowfullscreen mozallowfullscreen></iframe>`;
-            }
-
-            if (url.endsWith('.jpg') || url.endsWith('.png') || url.endsWith('.jpeg') || url.endsWith('.webp') || url.endsWith('.gif')) {
-                return `<img src="${url}" alt="Media Image">`;
-            }
-
-            return `<video controls style="width:100%; height:100%;" src="${url}"></video>`;
         }
 
-        async function saveAndPost() {
-            const submitBtn = document.getElementById('submitBtn');
-            const title = document.getElementById('titleInput').value.trim();
-            const videoUrl = document.getElementById('videoInput').value.trim();
-            const text = document.getElementById('textInput').value.trim();
-            const adText = document.getElementById('adTextInput').value.trim();
-            const adMediaUrl = document.getElementById('adMediaInput').value.trim();
+        // Admin မှ Video အချက်အလက်များ သိမ်းဆည်းခြင်း
+        function saveVideoData() {
+            const title = document.getElementById('adminVideoTitle').value;
+            const link = document.getElementById('adminVideoLink').value;
+            const caption = document.getElementById('adminVideoCaption').value;
 
-            if (!title || !videoUrl) {
-                alert('Title and Video Link are required!');
+            if (!link) {
+                alert("ကျေးဇူးပြု၍ Video Link ထည့်ပါ!");
                 return;
             }
 
-            submitBtn.innerText = "Publishing...";
-            submitBtn.disabled = true;
+            // Web Storage တွင် အချက်အလက်များကို သိမ်းထားမည်
+            const videoData = { title, link, caption };
+            localStorage.setItem('site_video_data', JSON.stringify(videoData));
 
-            const postData = {
-                title: title,
-                videoUrl: videoUrl,
+            loadVideoData();
+            alert("Video တင်ဆက်မှု အောင်မြင်ပါသည်။");
+        }
+
+        // တင်ထားသော Video အချက်အလက်များကို ရယူပြသခြင်း
+        function loadVideoData() {
+            const savedData = localStorage.getItem('site_video_data');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('displayTitle').innerText = data.title || "ခေါင်းစဉ် မရှိပါ";
+                document.getElementById('displayCaption').innerText = data.caption || "Caption မရှိပါ။";
+                document.getElementById('mainPlayer').src = data.link;
+            }
+        }
+
+        // Comment ထည့်သွင်းခြင်း
+        function addComment() {
+            const input = document.getElementById('commentInput');
+            const text = input.value.trim();
+
+            if (text === "") return;
+
+            let comments = JSON.parse(localStorage.getItem('site_comments') || "[]");
+            const newComment = {
                 text: text,
-                adText: adText,
-                adMediaUrl: adMediaUrl,
-                time: new Date().toLocaleDateString()
+                time: new Date().toLocaleString()
             };
 
-            try {
-                const response = await fetch(`${DB_URL}.json`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(postData)
-                });
+            comments.push(newComment);
+            localStorage.setItem('site_comments', JSON.stringify(comments));
 
-                if (response.ok) {
-                    alert("Video published successfully!");
-                    document.getElementById('uploadForm').reset();
-                    closeModal();
-                    loadPostsFromFirebase();
-                } else {
-                    const errData = await response.json();
-                    alert("Error posting video: " + (errData.error || response.statusText));
-                }
-            } catch (err) {
-                alert("Network/Connection Error: " + err.message);
-            } finally {
-                submitBtn.innerText = "Publish Video";
-                submitBtn.disabled = false;
-            }
+            input.value = "";
+            loadComments();
         }
 
-        async function loadPostsFromFirebase() {
-            try {
-                const response = await fetch(`${DB_URL}.json`);
-                const data = await response.json();
-                
-                const videoGrid = document.getElementById('videoGrid');
-                videoGrid.innerHTML = '';
+        // Comment များကို ပြသခြင်း
+        function loadComments() {
+            const commentList = document.getElementById('commentList');
+            commentList.innerHTML = "";
+            let comments = JSON.parse(localStorage.getItem('site_comments') || "[]");
 
-                if (data) {
-                    const postsArray = Object.keys(data).map(key => ({
-                        id: key,
-                        ...data[key]
-                    })).reverse();
-
-                    postsArray.forEach(post => {
-                        const card = document.createElement('div');
-                        card.className = 'video-card';
-
-                        let adHTML = '';
-                        if ((post.adText && post.adText !== '') || (post.adMediaUrl && post.adMediaUrl !== '')) {
-                            let mediaHTML = post.adMediaUrl ? `<div class="ad-media-wrapper">${getMediaElementHTML(post.adMediaUrl)}</div>` : '';
-                            adHTML = `
-                                <div class="ad-banner-box">
-                                    <span class="ad-badge">AD</span>
-                                    <div>${post.adText || ''}</div>
-                                    ${mediaHTML}
-                                </div>
-                            `;
-                        }
-
-                        card.innerHTML = `
-                            <div class="video-thumbnail-wrapper">
-                                ${getMediaElementHTML(post.videoUrl)}
-                            </div>
-                            <div class="video-info">
-                                <div>
-                                    <div class="video-title">${post.title}</div>
-                                    <div class="video-desc">${post.text || ''}</div>
-                                    ${adHTML}
-                                </div>
-                                <div class="card-footer">
-                                    <span>🕒 ${post.time}</span>
-                                    <button class="btn-delete" onclick="deletePost('${post.id}')">Delete</button>
-                                </div>
-                            </div>
-                        `;
-                        videoGrid.appendChild(card);
-                    });
-                }
-            } catch (err) {
-                console.error("Failed to load posts:", err);
-            }
+            comments.forEach(c => {
+                const li = document.createElement('li');
+                li.className = 'comment-item';
+                li.innerHTML = `${escapeHtml(c.text)} <span>${c.time}</span>`;
+                commentList.appendChild(li);
+            });
         }
 
-        async function deletePost(id) {
-            const password = prompt("Admin Password to Delete:");
-            if (password === ADMIN_PASSWORD) {
-                try {
-                    const response = await fetch(`${DB_URL}/${id}.json`, { method: 'DELETE' });
-                    if (response.ok) {
-                        alert("Post deleted!");
-                        loadPostsFromFirebase();
-                    } else {
-                        alert("Failed to delete post!");
-                    }
-                } catch (err) {
-                    alert("Error: " + err.message);
-                }
-            } else if (password !== null) {
-                alert("Incorrect Password!");
-            }
+        // XSS Protection အတွက် HTML Escape လုပ်ခြင်း
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
         }
+
+        // စာမျက်နှာ စဖွင့်ချိန်တွင် ဒေတာများ ဆွဲယူခြင်း
+        window.onload = function() {
+            loadVideoData();
+            loadComments();
+        };
     </script>
 </body>
 </html>
