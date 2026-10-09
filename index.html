@@ -201,7 +201,7 @@
 
     <div class="container">
 
-        <!-- Admin Panel (Viewer မပြုပြင်နိုင်အောင် သီးသန့်ထားထားသည်) -->
+        <!-- Admin Panel -->
         <div class="admin-panel" id="adminPanel">
             <h3>Admin Dashboard (Add/Update Video)</h3>
             <input type="text" id="adminVideoTitle" placeholder="Video ခေါင်းစဉ် ရေးပါ...">
@@ -213,7 +213,6 @@
         <!-- Main Video Display Area -->
         <div class="player-container">
             <div class="video-box" id="videoBox">
-                <!-- Video Link iframe အဖြစ် ဤနေရာတွင် ပေါ်မည် -->
                 <iframe id="mainPlayer" src="" allowfullscreen></iframe>
             </div>
             
@@ -240,13 +239,14 @@
     </div>
 
     <script>
-        // Admin Panel ကို Toggle လုပ်ခြင်း (စမ်းသပ်ရန်)
+        // Admin Panel ကို Toggle လုပ်ပြီး တင်ထားသော Data များကို Input Field များထဲသို့ ဖြည့်သွင်းပေးခြင်း
         function toggleAdmin() {
             const panel = document.getElementById('adminPanel');
             if (panel.style.display === 'none' || panel.style.display === '') {
                 let password = prompt("Admin Password ရိုက်ထည့်ပါ:");
                 if (password === "ridwarn952001@") { // Admin စကားဝှက်
                     panel.style.display = 'block';
+                    populateAdminInputs(); // Admin Panel ပွင့်သွားပါက ယခင်တင်ထားသော အချက်အလက်များ ဖြည့်ပေးမည်
                 } else {
                     alert("Password မှားယွင်းနေပါသည်။");
                 }
@@ -255,7 +255,18 @@
             }
         }
 
-        // Admin မှ Video အချက်အလက်များ သိမ်းဆည်းခြင်း
+        // LocalStorage မှ အချက်အလက်များကို Admin Input များထဲသို့ ထည့်သွင်းခြင်း
+        function populateAdminInputs() {
+            const savedData = localStorage.getItem('site_video_data');
+            if (savedData) {
+                const data = JSON.parse(savedData);
+                document.getElementById('adminVideoTitle').value = data.title || "";
+                document.getElementById('adminVideoLink').value = data.link || "";
+                document.getElementById('adminVideoCaption').value = data.caption || "";
+            }
+        }
+
+        // Admin မှ Video အချက်အလက်များ သိမ်းဆည်းခြင်း / Edit ပြုလုပ်ခြင်း
         function saveVideoData() {
             const title = document.getElementById('adminVideoTitle').value;
             const link = document.getElementById('adminVideoLink').value;
@@ -266,12 +277,12 @@
                 return;
             }
 
-            // Web Storage တွင် အချက်အလက်များကို သိမ်းထားမည်
+            // Web Storage တွင် အချက်အလက်များကို ပြင်ဆင်သိမ်းဆည်းမည်
             const videoData = { title, link, caption };
             localStorage.setItem('site_video_data', JSON.stringify(videoData));
 
             loadVideoData();
-            alert("Video တင်ဆက်မှု အောင်မြင်ပါသည်။");
+            alert("Video အချက်အလက်များကို အောင်မြင်စွာ ပြင်ဆင်ပြီးပါပြီ။");
         }
 
         // တင်ထားသော Video အချက်အလက်များကို ရယူပြသခြင်း
